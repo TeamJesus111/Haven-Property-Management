@@ -1,47 +1,35 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.composeCompiler)
-
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.multiplatform)
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_11
+    androidTarget {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
     }
-}
-dependencies {
-    implementation(project(":shared"))
-
-    implementation(libs.androidx.activity.compose)
-
-    implementation(libs.compose.uiToolingPreview)
-    debugImplementation(libs.compose.uiTooling)
 }
 
 android {
-    namespace = "com.example.mobileappproj"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    buildFeatures {
-        viewBinding = true
-        dataBinding = true
-    }
+    namespace = "com.example.tenantmanagementsystemgroupa"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.mobileappproj"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        applicationId = "com.example.tenantmanagementsystemgroupa"
+        minSdk = 24
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -49,11 +37,29 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
-        compose = true
+        viewBinding = true
+        dataBinding = true
     }
+}
+
+dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+
+    // Navigation Component libraries
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.8")[cite: 17]
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.8")[cite: 17]
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
