@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <!-- Data variables can go here later -->
+        <variable
+            name="tenant"
+            type="com.example.tenantmanagementsystemgroupa.Tenant" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

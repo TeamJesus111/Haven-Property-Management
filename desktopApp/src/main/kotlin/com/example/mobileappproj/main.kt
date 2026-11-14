@@ -1,4 +1,5 @@
 package com.example.mobileappproj
+
 // --- CONSTANTS & DATA MODELS ---
 const val APP_NAME = "NEON HAVEN // RENTAL PORTAL"
 
@@ -30,21 +31,21 @@ fun main() {
         Property(3, "Pulse Studio Lofts", "Kileleshwa", 42000.0, 1),
         Property(4, "Vaporwave Residency", "Kilimani", 85000.0, 3)
     )
-    val bookings = mutableListOf()
+    val bookings = mutableListOf<Booking>()
 
     var running = true
 
     while (running) {
-        println("\n\(CYAN\)BOLD=============================================$RESET")
-        println("\(PINK\)BOLD      \(APP_NAME\)RESET")
-        println("\(CYAN\)BOLD=============================================$RESET")
-        println("\(PURPLE[1]\)RESET View All Properties")
-        println("\(PURPLE[2]\)RESET Search Property (Location & Budget)")
-        println("\(PURPLE[3]\)RESET Add New Listing (Landlord/Agent)")
-        println("\(PURPLE[4]\)RESET Book a Viewing")
-        println("\(PURPLE[5]\)RESET View Bookings")
-        println("\(PURPLE[6]\)RESET Exit")
-        print("\(PINK>> Select option:\)RESET")
+        println("\n$CYAN$BOLD=============================================$RESET")
+        println("$PINK$BOLD      $APP_NAME$RESET")
+        println("$CYAN$BOLD=============================================$RESET")
+        println("$PURPLE[1]$RESET View All Properties")
+        println("$PURPLE[2]$RESET Search Property (Location & Budget)")
+        println("$PURPLE[3]$RESET Add New Listing (Landlord/Agent)")
+        println("$PURPLE[4]$RESET Book a Viewing")
+        println("$PURPLE[5]$RESET View Bookings")
+        println("$PURPLE[6]$RESET Exit")
+        print("$PINK>> Select option: $RESET")
 
         when (readlnOrNull()?.trim()) {
             "1" -> displayProperties(properties)
@@ -53,42 +54,42 @@ fun main() {
             "4" -> bookViewing(properties, bookings)
             "5" -> displayBookings(bookings)
             "6" -> {
-                println("\n\(PINK Exiting...\)RESET")
+                println("\n$PINK Exiting...$RESET")
                 running = false
             }
-            else -> println("\n\(PINK[!] Invalid selection. Try again.\)RESET")
+            else -> println("\n$PINK[!] Invalid selection. Try again.$RESET")
         }
     }
 }
 
-fun displayProperties(properties: List) {
-    println("\n\(CYAN--- AVAILABLE PROPERTIES ---\)RESET")
+fun displayProperties(properties: List<Property>) {
+    println("\n$CYAN--- AVAILABLE PROPERTIES ---$RESET")
     for (p in properties) {
-        val status = if (p.isAvailable) "\(CYAN[AVAILABLE]\)RESET" else "\(PINK[OCCUPIED]\)RESET"
-        println("\({p.id}.\){p.title} | Location: \({p.location} | KSh\){p.priceKsh} | \({p.bedrooms} Beds |\)status")
+        val status = if (p.isAvailable) "$CYAN[AVAILABLE]$RESET" else "$PINK[OCCUPIED]$RESET"
+        println("${p.id}. ${p.title} | Location: ${p.location} | KSh ${p.priceKsh} | ${p.bedrooms} Beds | $status")
     }
 }
 
-fun searchProperties(properties: List) {
+fun searchProperties(properties: List<Property>) {
     print("\nEnter location target: ")
     val loc = readlnOrNull() ?: ""
     print("Enter maximum budget (KSh): ")
     val maxBudget = readlnOrNull()?.toDoubleOrNull() ?: Double.MAX_VALUE
 
-    println("\n\(CYAN--- SEARCH RESULTS ---\)RESET")
+    println("\n$CYAN--- SEARCH RESULTS ---$RESET")
     val results = properties.filter {
         it.location.contains(loc, ignoreCase = true) && it.priceKsh <= maxBudget
     }
 
     if (results.isEmpty()) {
-        println("\(PINK No properties found matching criteria.\)RESET")
+        println("$PINK No properties found matching criteria.$RESET")
     } else {
-        results.forEach { println("\({it.id}.\){it.title} in \({it.location} - KSh\){it.priceKsh}") }
+        results.forEach { println("${it.id}. ${it.title} in ${it.location} - KSh ${it.priceKsh}") }
     }
 }
 
-fun addProperty(properties: MutableList) {
-    println("\n\(CYAN--- ADD NEW LISTING ---\)RESET")
+fun addProperty(properties: MutableList<Property>) {
+    println("\n$CYAN--- ADD NEW LISTING ---$RESET")
     print("Enter Property Title: ")
     val title = readlnOrNull() ?: ""
     print("Enter Location: ")
@@ -99,11 +100,11 @@ fun addProperty(properties: MutableList) {
     val beds = readlnOrNull()?.toIntOrNull() ?: 1
 
     properties.add(Property(properties.size + 1, title, location, price, beds))
-    println("\(PINK[✓] Listing added successfully!\)RESET")
+    println("$PINK[✓] Listing added successfully!$RESET")
 }
 
-fun bookViewing(properties: List, bookings: MutableList) {
-    println("\n\(CYAN--- BOOK A VIEWING ---\)RESET")
+fun bookViewing(properties: List<Property>, bookings: MutableList<Booking>) {
+    println("\n$CYAN--- BOOK A VIEWING ---$RESET")
     displayProperties(properties)
     print("\nEnter Property ID to book: ")
     val id = readlnOrNull()?.toIntOrNull()
@@ -115,19 +116,19 @@ fun bookViewing(properties: List, bookings: MutableList) {
         val name = readlnOrNull() ?: "Client"
         bookings.add(Booking(prop.title, name))
         prop.isAvailable = false
-        println("\(PINK[✓] Viewing successfully booked for\)name!$RESET")
+        println("$PINK[✓] Viewing successfully booked for $name!$RESET")
     } else {
-        println("\(PINK[!] Property unavailable or invalid ID.\)RESET")
+        println("$PINK[!] Property unavailable or invalid ID.$RESET")
     }
 }
 
-fun displayBookings(bookings: List) {
-    println("\n\(CYAN--- YOUR BOOKED VIEWINGS ---\)RESET")
+fun displayBookings(bookings: List<Booking>) {
+    println("\n$CYAN--- YOUR BOOKED VIEWINGS ---$RESET")
     if (bookings.isEmpty()) {
         println("No viewing appointments yet.")
     } else {
         bookings.forEachIndexed { i, b ->
-            println("\({i + 1}. Client:\){b.clientName} -> Reserved: ${b.propertyTitle}")
+            println("${i + 1}. Client: ${b.clientName} -> Reserved: ${b.propertyTitle}")
         }
     }
 }
