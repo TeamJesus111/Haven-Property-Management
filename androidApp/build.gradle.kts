@@ -1,27 +1,16 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.multiplatform)
-    id("androidx.navigation.safeargs.kotlin")
-}
-
-kotlin {
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
-        }
-    }
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.example.tenantmanagementsystemgroupa"
-    compileSdk = 34
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.example.tenantmanagementsystemgroupa"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -56,10 +45,16 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     // Navigation Component libraries
-    implementation("androidx.navigation:navigation-fragment-ktx:2.9.8")[cite: 17]
-    implementation("androidx.navigation:navigation-ui-ktx:2.9.8")[cite: 17]
+    implementation(libs.androidx.navigation.fragmentKtx)
+    implementation(libs.androidx.navigation.uiKtx)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.testExt.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Room: the local database library
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    // Generates the Room code (ksp, not implementation)
+    ksp(libs.androidx.room.compiler)
 }
